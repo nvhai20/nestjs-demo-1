@@ -51,4 +51,32 @@ export class UserService {
     });
     return await this.userRepository.save(newUser);
   }
+
+  async loginByUser(
+    email: string,
+    password: string,
+  ): Promise<{ user: UserEntity; token: string }> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { email },
+      });
+      if (!user) {
+        throw new HttpException('Không tìm thấy người dùng', 400);
+      }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        throw new HttpException('Mật khẩu không đúng', 400);
+      }
+
+      const token = this.jwtService.sign({
+        userId: user.id,
+        email: user.email,
+      });
+
+      return { user, token };
+    } catch (error) {
+      throw new HttpException('Đăng nhập không thành công', 500);
+    }
+  }
 }

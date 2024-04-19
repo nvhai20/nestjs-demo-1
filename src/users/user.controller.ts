@@ -41,4 +41,22 @@ export class UserController {
     console.log(email, firstName, lastName, password);
     return this.userService.createByUser(email, firstName, lastName, password);
   }
+
+  @Post('login')
+  async login(@Body() loginData: { email: string; password: string }) {
+    const { email, password } = loginData;
+    console.log(email, password);
+    return this.userService.loginByUser(email, password);
+  }
+
+  @Get('profile')
+  @UseGuards(AuthGuard('jwt'))
+  async getUserProfile(@GetUser() user) {
+    const userProfile = await this.userService.findByEmail(user.email);
+    return {
+      email: userProfile.email,
+      firstName: userProfile.firstName,
+      lastName: userProfile.lastName,
+    };
+  }
 }

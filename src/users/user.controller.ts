@@ -26,4 +26,19 @@ export class UserController {
     console.log(email);
     return this.userService.findByEmail(email);
   }
+
+  @Post('register')
+  async createByUser(
+    @Body()
+    userData: {
+      email: string;
+      firstName: string;
+      lastName: string;
+      password: string;
+    },
+  ) {
+    const { email, firstName, lastName, password } = userData;
+    console.log(email, firstName, lastName, password);
+    return this.userService.createByUser(email, firstName, lastName, password);
+  }
 }

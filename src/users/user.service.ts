@@ -27,4 +27,28 @@ export class UserService {
     console.log(emailDetail);
     return emailDetail;
   }
+
+  async createByUser(
+    email: string,
+    firstName: string,
+    lastName: string,
+    password: string,
+  ) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const existingUser = await this.userRepository.findOne({
+      where: { email },
+    });
+    if (existingUser) {
+      throw new Error('Email đã tồn tại');
+    }
+
+    const newUser = this.userRepository.create({
+      email,
+      firstName,
+      lastName,
+      password: hashedPassword,
+    });
+    return await this.userRepository.save(newUser);
+  }
 }

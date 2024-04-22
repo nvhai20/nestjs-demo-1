@@ -231,6 +231,8 @@ const app_service_1 = __webpack_require__(8);
 const typeorm_1 = __webpack_require__(9);
 const user_module_1 = __webpack_require__(10);
 const user_entity_1 = __webpack_require__(11);
+const product_module_1 = __webpack_require__(22);
+const product_entity_1 = __webpack_require__(23);
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -244,10 +246,11 @@ exports.AppModule = AppModule = __decorate([
                 username: 'root',
                 password: 'conga15214',
                 database: 'project_demo',
-                entities: [user_entity_1.UserEntity],
+                entities: [user_entity_1.UserEntity, product_entity_1.ProductEntity],
                 synchronize: false,
             }),
             user_module_1.UserModule,
+            product_module_1.ProductModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
@@ -736,6 +739,283 @@ exports.JwtStrategy = JwtStrategy = __decorate([
 "use strict";
 module.exports = require("passport-jwt");
 
+/***/ }),
+/* 22 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ProductModule = void 0;
+const common_1 = __webpack_require__(6);
+const typeorm_1 = __webpack_require__(9);
+const product_entity_1 = __webpack_require__(23);
+const product_controller_1 = __webpack_require__(24);
+const product_service_1 = __webpack_require__(25);
+let ProductModule = class ProductModule {
+};
+exports.ProductModule = ProductModule;
+exports.ProductModule = ProductModule = __decorate([
+    (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([product_entity_1.ProductEntity])],
+        providers: [product_service_1.ProductService],
+        controllers: [product_controller_1.ProductController],
+    })
+], ProductModule);
+
+
+/***/ }),
+/* 23 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ProductEntity = void 0;
+const typeorm_1 = __webpack_require__(12);
+const class_transformer_1 = __webpack_require__(13);
+let ProductEntity = class ProductEntity extends typeorm_1.BaseEntity {
+    constructor(partial) {
+        super();
+        Object.assign(this, partial);
+    }
+    get formattedPrice() {
+        if (typeof this.price === 'number') {
+            return `$${this.price.toFixed(2)}`;
+        }
+        else {
+            return 'Price is not a valid number';
+        }
+    }
+};
+exports.ProductEntity = ProductEntity;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    __metadata("design:type", Number)
+], ProductEntity.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], ProductEntity.prototype, "name", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    __metadata("design:type", String)
+], ProductEntity.prototype, "description", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'decimal', precision: 10, scale: 2 }),
+    __metadata("design:type", Number)
+], ProductEntity.prototype, "price", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)({ default: () => 'CURRENT_TIMESTAMP', nullable: true }),
+    __metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], ProductEntity.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)({ default: () => 'CURRENT_TIMESTAMP', nullable: true }),
+    __metadata("design:type", typeof (_c = typeof Date !== "undefined" && Date) === "function" ? _c : Object)
+], ProductEntity.prototype, "updatedAt", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [])
+], ProductEntity.prototype, "formattedPrice", null);
+exports.ProductEntity = ProductEntity = __decorate([
+    (0, typeorm_1.Entity)({ name: 'products' }),
+    __metadata("design:paramtypes", [typeof (_a = typeof Partial !== "undefined" && Partial) === "function" ? _a : Object])
+], ProductEntity);
+
+
+/***/ }),
+/* 24 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ProductController = void 0;
+const common_1 = __webpack_require__(6);
+const product_service_1 = __webpack_require__(25);
+let ProductController = class ProductController {
+    constructor(productService) {
+        this.productService = productService;
+    }
+    async getAllProducts() {
+        return this.productService.getAllProducts();
+    }
+    async getProductById(id) {
+        const product = await this.productService.getProductById(id);
+        if (!product) {
+            throw new common_1.NotFoundException(`Không tìm thấy sản phẩm ${id}`);
+        }
+        return product;
+    }
+    async createProduct(productData) {
+        return this.productService.createProduct(productData);
+    }
+    async updateProduct(id, productData) {
+        const updatedProduct = await this.productService.updateProduct(id, productData);
+        if (!updatedProduct) {
+            throw new common_1.NotFoundException(`Không tìm thấy sản phẩm ${id} `);
+        }
+        return updatedProduct;
+    }
+    async deleteProduct(id) {
+        const deletedProduct = await this.productService.deleteProduct(id);
+        if (!deletedProduct) {
+            throw new common_1.NotFoundException(`Không tìm thấy sản phẩm ${id}`);
+        }
+        return deletedProduct;
+    }
+};
+exports.ProductController = ProductController;
+__decorate([
+    (0, common_1.Get)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "getAllProducts", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "getProductById", null);
+__decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "createProduct", null);
+__decorate([
+    (0, common_1.Put)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "updateProduct", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "deleteProduct", null);
+exports.ProductController = ProductController = __decorate([
+    (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
+    (0, common_1.Controller)('products'),
+    __metadata("design:paramtypes", [typeof (_a = typeof product_service_1.ProductService !== "undefined" && product_service_1.ProductService) === "function" ? _a : Object])
+], ProductController);
+
+
+/***/ }),
+/* 25 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ProductService = void 0;
+const common_1 = __webpack_require__(6);
+const typeorm_1 = __webpack_require__(9);
+const typeorm_2 = __webpack_require__(12);
+const product_entity_1 = __webpack_require__(23);
+let ProductService = class ProductService {
+    constructor(productRepository) {
+        this.productRepository = productRepository;
+    }
+    async getAllProducts() {
+        return await this.productRepository.find();
+    }
+    async getProductById(id) {
+        return await this.productRepository.findOne({
+            where: { id },
+        });
+    }
+    async createProduct(productData) {
+        const { name, description, price } = productData;
+        const newProduct = this.productRepository.create({
+            name,
+            description,
+            price,
+        });
+        return await this.productRepository.save(newProduct);
+    }
+    async updateProduct(id, productData) {
+        const { name, description, price } = productData;
+        const product = await this.productRepository.findOne({
+            where: { id },
+        });
+        if (!product) {
+            throw new common_1.HttpException(`Không tìm thấy sản phẩm ${id}`, 404);
+        }
+        product.name = name;
+        product.description = description;
+        product.price = price;
+        return await this.productRepository.save(product);
+    }
+    async deleteProduct(id) {
+        const product = await this.productRepository.findOne({
+            where: { id },
+        });
+        if (!product) {
+            throw new common_1.HttpException(`Không tìm thấy sản phẩm ${id} `, 404);
+        }
+        await this.productRepository.remove(product);
+        return product;
+    }
+};
+exports.ProductService = ProductService;
+exports.ProductService = ProductService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(product_entity_1.ProductEntity)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object])
+], ProductService);
+
+
 /***/ })
 /******/ 	]);
 /************************************************************************/
@@ -798,7 +1078,7 @@ module.exports = require("passport-jwt");
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("3abc58240aed354a91cc")
+/******/ 		__webpack_require__.h = () => ("925ec1f7e44b2cec6e0e")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
